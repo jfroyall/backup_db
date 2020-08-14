@@ -5,8 +5,10 @@ Description: Utility functions
 Version: 
 Author: 
 """
+
 import os
 #import yaml
+import json
 import argparse
 
 
@@ -18,12 +20,17 @@ args = parser.parse_args()
 ForeRED = "\033[01;31m{0}\033[00m"
 ForeYELLOW = "\033[01;32m{0}\033[00m"
 ForeBLUE = "\033[01;33m{0}\033[00m"
+
 HOME = os.getenv("HOME") + "/mdc-secrets/"
+
+OPS_CONCOURSE_CREDS_FILE="/home/ubuntu/mcp-secrets/concourse/ops/creds.yml"
+
 PARAM_FILES = (
     "director/director-params{0}.yml".format('-aws' if args.aws else ''),
     "director/cloud-config-params{0}.yml".format('-aws' if args.aws else ''),
     "concourse/concourse-params{0}.yml".format('-aws' if args.aws else '')
 )
+
 REPO_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -48,9 +55,11 @@ def save_yml(OLD_PARAM_FILE, OLD_PARAM_YML, ADD_KEYS, ADD_VALUES):
             print(exc)
 
 def print_info(a_string):
+  "This function prints an informational message"
   print (ForeBLUE.format("info: %s" %(a_string)))
 
 def print_warning(a_string):
+  "This function prints a warning message"
   print (ForeYELLOW.format("warning: %s" %(a_string)))
 
 def print_error(a_string):
