@@ -24,3 +24,5 @@ This project is used to move the databases from one foundation to another.
 
 - 14 Aug 2020
   - Finished the outline of `utils.py`.
+
+- 18 Aug 2020
