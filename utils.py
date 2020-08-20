@@ -202,14 +202,44 @@ def check_cf_config(region, foundation, org, space, force_flag=False):
 
   return False
 
+OPS_CONCOURSE_CREDS_FILE="/path/to/some/file"
 #######################################################
 def credhub_login(file_name):
-  print_error ("Fix this code")
+  """
+  Log onto 'credhub'
+    
+  """
+
+  print_warning ("Entering the function!")
+
+  bosh_command="bosh int %s --path /credhub-ca/ca" % OPS_CONCOURSE_CREDS_FILE
+  print_info ("bosh command: "+bosh_command )
+  ch_command="credhub api --ca-cert=%s --server=https://ciops%s:8844" % ("foobar", DOMAIN)
+  print_info ("ch command: "+ch_command )
+
+  print_warning("Add BOSH and credhub commands here.")
+
+  bosh_command="bosh login %s --path /concourse_to_credhub_secret" % OPS_CONCOURSE_CREDS_FILE
+  print_info ("bosh command: "+bosh_command )
+
+  ch_command="credhub login --client-name=concourse_to_credhub --client_secret=%s" %("foobar")
+  print_info ("ch command: "+ch_command )
+
+  print_warning("Add BOSH and credhub commands here")
+
+  print_warning ("Leaving the function!")
+
   return False
 
 #######################################################
 def omg(region, foundation):
-  print_error ("Fix this code")
+  """
+  Returns the credentials for various components of the specified foundation.
+  """
+  print_warning ("Entering code")
+
+
+  print_warning ("Leaving code")
   return False
 
 #######################################################
