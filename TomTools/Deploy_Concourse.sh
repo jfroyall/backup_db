@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### Concourse Deployment ###
-rm -rf ~/workspace/concourse*
+rm -rf ~/workspace/concourse-bosh-deployment
 
 bosh -e vbox upload-stemcell \
   https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-xenial-go_agent?v=315.45 \
@@ -10,8 +10,8 @@ bosh -e vbox stemcells
 
 cd ~/workspace
 git clone https://github.com/concourse/concourse-bosh-deployment.git
-cd ~/workspace/concourse-bosh-deployment/cluster
 
+cd ~/workspace/concourse-bosh-deployment/cluster
 bosh -e vbox update-cloud-config cloud_configs/vbox.yml
 
 bosh -e vbox deploy -d concourse concourse.yml \

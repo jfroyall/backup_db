@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ### Clean up Environment ###
-VBoxManage list runningvms | awk '{print $2;}' | xargs -I vmid VBoxManage controlvm vmid poweroff
-VBoxManage list vms | awk '{print $2;}' | xargs -I vmid VBoxManage unregistervm --delete vmid
+#VBoxManage list runningvms | awk '{print $2;}' | xargs -I vmid VBoxManage controlvm vmid poweroff
+#VBoxManage list vms | awk '{print $2;}' | xargs -I vmid VBoxManage unregistervm --delete vmid
 #rm -rf .bosh*
 #rm -rf ~/VirtualBox\ VMs/
 #rm -rf ~/workspace/*deployment*
@@ -11,19 +11,18 @@ VBoxManage list vms | awk '{print $2;}' | xargs -I vmid VBoxManage unregistervm 
 ### BOSH Director Deployment ###
 #mkdir ~/workspace
 
-rm -rf ~/workspace/bosh-deployment
-cd ~/workspace
-git clone https://github.com/cloudfoundry/bosh-deployment bosh-deployment
+#rm -rf ~/workspace/bosh-deployment
+#cd ~/workspace
+#git clone https://github.com/cloudfoundry/bosh-deployment bosh-deployment
 
-mkdir -p ~/workspace/deployments/vbox
+#mkdir -p ~/workspace/deployments/vbox
 cd ~/workspace/deployments/vbox
 
 
+#cp ~/workspace/bosh-deployment/virtualbox/cpi.yml ~/workspace/bosh-deployment/virtualbox/cpi.yml.orig
+#sed 's/6144/8192/g' ~/workspace/bosh-deployment/virtualbox/cpi.yml.orig > ~/workspace/bosh-deployment/virtualbox/cpi.yml
 
-cp ~/workspace/bosh-deployment/virtualbox/cpi.yml ~/workspace/bosh-deployment/virtualbox/cpi.yml.orig
-sed 's/6144/8192/g' ~/workspace/bosh-deployment/virtualbox/cpi.yml.orig > ~/workspace/bosh-deployment/virtualbox/cpi.yml
-
-bosh create-env ~/workspace/bosh-deployment/bosh.yml \
+bosh delete-env  ~/workspace/bosh-deployment/bosh.yml \
   --state state.json \
   --vars-store ./creds.yml \
   -o ~/workspace/bosh-deployment/virtualbox/cpi.yml \
@@ -39,10 +38,9 @@ bosh create-env ~/workspace/bosh-deployment/bosh.yml \
 
 
 
-cd ~/workspace/deployments
-bosh -e 192.168.50.6 alias-env vbox --ca-cert <(bosh int vbox/creds.yml --path /director_ssl/ca)
-bosh int vbox/creds.yml --path /admin_password
-bosh -e vbox login  --client=admin --client-secret=<(bosh int vbox/creds.yml --path /admin_password)
+#cd ~/workspace/deployments
+#bosh -e 192.168.50.6 alias-env vbox --ca-cert <(bosh int vbox/creds.yml --path /director_ssl/ca)
+#bosh int vbox/creds.yml --path /admin_password
 #bosh -e vbox login
 
 #umask 077; touch ~/workspace/deployments/vbox/director_priv.key
