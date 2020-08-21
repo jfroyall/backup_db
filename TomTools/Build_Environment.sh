@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ### Clean up Environment ###
-VBoxManage list runningvms | awk '{print $2;}' | xargs -I vmid VBoxManage controlvm vmid poweroff
-VBoxManage list vms | awk '{print $2;}' | xargs -I vmid VBoxManage unregistervm --delete vmid
+#VBoxManage list runningvms | awk '{print $2;}' | xargs -I vmid VBoxManage controlvm vmid poweroff
+#VBoxManage list vms | awk '{print $2;}' | xargs -I vmid VBoxManage unregistervm --delete vmid
 #rm -rf .bosh*
 #rm -rf ~/VirtualBox\ VMs/
 #rm -rf ~/workspace/*deployment*
@@ -42,8 +42,8 @@ bosh create-env ~/workspace/bosh-deployment/bosh.yml \
 cd ~/workspace/deployments
 bosh -e 192.168.50.6 alias-env vbox --ca-cert <(bosh int vbox/creds.yml --path /director_ssl/ca)
 bosh int vbox/creds.yml --path /admin_password
-bosh -e vbox login  --client=admin --client-secret=<(bosh int vbox/creds.yml --path /admin_password)
-#bosh -e vbox login
+#bosh -e vbox login  --client=admin --client-secret=<(bosh int vbox/creds.yml --path /admin_password)
+bosh -e vbox login
 
 #umask 077; touch ~/workspace/deployments/vbox/director_priv.key
 #bosh int ~/workspace/deployments/vbox/creds.yml --path /jumpbox_ssh/private_key > ~/workspace/deployments/vbox/director_priv.key

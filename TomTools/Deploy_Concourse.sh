@@ -28,7 +28,13 @@ bosh -e vbox deploy -d concourse concourse.yml \
   --var db_vm_type=concourse \
   --var db_persistent_disk_type=db \
   --var worker_vm_type=concourse \
-  --var deployment_name=concourse
+  --var deployment_name=concourse \
+  --var azs="[z1]"
+if [ $? -ne 0 ]; 
+then
+  echo "Deployment of concourse failed!"
+  exit 1
+fi
 
 sudo route add -net 10.244.0.0/16 192.168.50.6
 fly -t ci login -c http://10.244.15.2:8080 -u admin -p admin

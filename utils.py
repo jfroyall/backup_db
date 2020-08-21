@@ -212,14 +212,14 @@ def credhub_login(file_name):
 
   print_warning ("Entering the function!")
 
-  bosh_command="bosh int %s --path /credhub-ca/ca" % OPS_CONCOURSE_CREDS_FILE
+  bosh_command="bosh int %s --path /credhub-ca/ca" % file_name
   print_info ("bosh command: "+bosh_command )
   ch_command="credhub api --ca-cert=%s --server=https://ciops%s:8844" % ("foobar", DOMAIN)
   print_info ("ch command: "+ch_command )
 
   print_warning("Add BOSH and credhub commands here.")
 
-  bosh_command="bosh login %s --path /concourse_to_credhub_secret" % OPS_CONCOURSE_CREDS_FILE
+  bosh_command="bosh login %s --path /concourse_to_credhub_secret" % file_name
   print_info ("bosh command: "+bosh_command )
 
   ch_command="credhub login --client-name=concourse_to_credhub --client_secret=%s" %("foobar")
@@ -232,15 +232,89 @@ def credhub_login(file_name):
   return False
 
 #######################################################
-def omg(region, foundation):
+def omg(region, foundation, force=False):
   """
   Returns the credentials for various components of the specified foundation.
+
+  TO_DO:  Buffer the credentials for given arguments
   """
   print_warning ("Entering code")
 
+  print_info("check for existence")
+
+  print_info("Login with the CredHub");
+
+  credhub_login(OPS_CONCOURSE_CREDS_FILE)
+
+  the_command="credhub get -n /concourse/%s-%s/opsman_admin_password | tail -3 head -1 | awk '{print $2}'" \
+                        % (region, foundation)
+  print_info("This is the command: "+the_command)
+  opsman_pw = "foobar"
+
+  #  Retrieve Produce ID from OM
+  opsman_url="https://opsman.%s.%s%s" %(foundation, region, DOMAIN) 
+  print_info("This is the URL: "+opsman_url)
+
+  the_command="./stubs/om -t %s  -u admin -p %s -k curl -s -p /api/v0/deployed/products" % (opsman_url, opsman_pw)
+  the_command="./stubs/om"
+  print_info("This is the command: "+the_command)
+  p = subprocess.Popen(the_command,
+                          stdin=subprocess.PIPE,
+                          stdout=subprocess.PIPE,
+                          stderr=subprocess.PIPE
+                        )
+  out, err = p.communicate(None)
+  print_info("This is the result from the read: " + out)
+
+
+  #  Run this command to get the product ID
+  the_command="echo %s | jq '.[] | select(.type==\"cf\") | .installation_name'" % out;
+  print_warning("This command must be implemented: "+the_command)
+  product_id="FOOBAR"
+
+  
+
+  #  Run this command to get the director's password
+  the_command="om -t %s  -u admin -p %s -k curl -s -p /api/v0/deployed/products/%s/credentials/.uaa.admin_credentials" % (opsman_url, opsman_pw, product_id)
+  print_info("This is the command: "+the_command)
+  p = subprocess.Popen(the_command,
+                          shell=True,
+                          stdin=subprocess.PIPE,
+                          stdout=subprocess.PIPE,
+                          stderr=subprocess.PIPE
+                        )
+  out, err = p.communicate(None)
+  print_info("This is the result from the read: " + out)
+  #  Run this command to get the product ID
+  the_command="echo %s | jq '.credential.value.password'" % out
+  print_warning("This command must be implemented: "+the_command)
+  appsman_password="FOOBAR"
+
+
+  #  Run this command to get the opsman's SSH password
+  the_command="om -t %s  -u admin -p %s -k curl -s -p /api/v0/deployed/director/credentials/uaa_admin_user_credentials"\
+                        % (opsman_url, opsman_pw)
+  print_info("This is the command: "+the_command)
+  p = subprocess.Popen(the_command,
+                          shell=True,
+                          stdin=subprocess.PIPE,
+                          stdout=subprocess.PIPE,
+                          stderr=subprocess.PIPE
+                        )
+  out, err = p.communicate(None)
+  print_info("This is the result from the read: " + out)
+  #  Run this command to get the product ID
+  the_command="echo %s | jq '.credential.value.password'" % out
+  print_warning("This command must be implemented: "+the_command)
+  opssman_ssh_password="FOOBAR"
+
+
+  print_warning ("Still need to collect all of the passwords in one dictionary")
 
   print_warning ("Leaving code")
+
   return False
+
 
 #######################################################
 def is_key(a_string):
@@ -255,6 +329,11 @@ def execute_over_ssh (user_name, creds, fqdn, cmd):
 
 
 if __name__ == "__main__":
+
+
+    os.environ['PATH']="./stubs:" + os.environ['PATH'];
+    print_info("This is the PATH: " + os.environ['PATH']);
+    #raise_error("Early exit %s!" %(REPO_PATH))
 
     print_info ("info test")
     print_warning ("warning test")
