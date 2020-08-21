@@ -13,10 +13,108 @@ import json
 import argparse
 import subprocess
 
+from utils import print_info, print_warning, print_error, raise_error 
+from utils import check_cf_config, omg
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--aws', action='store_true')
-args = parser.parse_args()
+DOMAIN=".kesselrun.org"
+
+
+def extract_tools():
+  """
+    Extract tools from the S3.
+  """
+  MC="/usr/local/bin/mc"
+  print_warning("Remove this patch");
+  MC="stubs/mc"
+  SSH_PASS="sshpass"
+  
+
+  if ( not os.path.exists(MC)):
+      raise_error("The minio client (%s) was not found." % MC)
+    
+  if ( os.path.exists(SSH_PASS)):
+    return True
+
+  the_command="mc cp ecs/docker-images/s3/masterblaster.tgz ."
+  ret = subprocess.call(the_command, shell=True)
+  if (ret != 0 ):
+      raise_error("Failed the following command: %s " % the_command)
+  
+
+  the_command="tar xzf masterblaster.tgz ./rootfs/usr/bin/sshpass"
+  ret = subprocess.call(the_command, shell=True)
+  #if (ret != 0 ):
+  #    raise_error("Failed the following command: %s " % the_command)
+
+  #the_command="ln -s ./rootfs/usr/bin/sshpass ./sshpass"
+  #ret = subprocess.call(the_command, shell=True)
+  
+  print_warning("Must clean up after the run")
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--aws', action='store_true')
+    args = parser.parse_args()
+
+    os.environ['PATH']="./stubs:" + os.environ['PATH'];
+
+    site="usec"
+    foundation="fulcrum"
+    org="slapshot"
+    space="usec"
+    app_name="org"
+    db_name="slapshot-db"
+
+    db_name="slapshot-usec"
+    db_user_name="service_instance_db"
+    db_user_password="foobar"
+    service_guid="foobar"
+
+
+    DOMAIN=".kesselrun.org"
+
+    opsman_fqdn="opsman"+foundation+site+DOMAIN
+    opsman_url="https://"+opsman_fqdn
+    jumpbox_fqdn="jumpbox"+site+DOMAIN
+
+    temp_working_dire="/tmp/db_dump_work"
+
+
+    
+
+    # check that the cf CLI is properly configured
+    check_cf_config(site, foundation, org, space, True)
+
+    # get the required passwords
+    omg(site, foundation)
+
+    extract_tools();
+
+    raise_error("Early exit!");     ##############<<<<<<
+
+    #print_info("This is the PATH: " + os.environ['PATH']);
+
+    check_app_name("foobar")
+    check_org_name("foobar")
+    check_foundation_name("foobar")
+    check_space_name("foobar")
+    check_site_name("foobar")
+    set_constants();
+    check_constants();
+
+    check_cf_config("eu", "fulcrum", "org", "space", True)
+
+    is_key("foobar");
+    execute_over_ssh ("u", "c", "f", "c")
+
+
+    credhub_login("foobar");
+
+    omg("r", "f")
+
+
+
 
 
 ForeRED = "\033[01;31m{0}\033[00m"
@@ -373,86 +471,3 @@ def execute_over_ssh (user_name, creds, fqdn, cmd):
   return False
 
 
-if __name__ == "__main__":
-
-    os.environ['PATH']="./stubs:" + os.environ['PATH'];
-    #print_info("This is the PATH: " + os.environ['PATH']);
-
-    check_app_name("foobar")
-    check_org_name("foobar")
-    check_foundation_name("foobar")
-    check_space_name("foobar")
-    check_site_name("foobar")
-    set_constants();
-    check_constants();
-
-    check_cf_config("eu", "fulcrum", "org", "space", True)
-
-    is_key("foobar");
-    execute_over_ssh ("u", "c", "f", "c")
-
-
-    credhub_login("foobar");
-
-    omg("r", "f")
-
-
-    raise_error("Early exit!");     ##############<<<<<<
-
-
-
-
-
-    for PARAM in PARAM_FILES:
-        if "director" in PARAM:
-            ADD_KEYS = []
-            ADD_VALUES = []
-            APP = "director"
-            OLD_PARAM_FILE = HOME + PARAM
-            if not os.path.isfile(OLD_PARAM_FILE):
-                print (ForeRED.format("Creating %s" %(OLD_PARAM_FILE)))
-                os.system("mkdir -p %s/%s" %(HOME, APP))
-                os.system("cp %s/templates/%s %s" %(REPO_PATH, PARAM, OLD_PARAM_FILE))
-            else:
-                NEW_PARAM = ("%s/templates/%s" %(REPO_PATH, PARAM))
-
-                OLD_PARAM_YML = read_yml(OLD_PARAM_FILE)
-                NEW_PARAM_YML = read_yml(NEW_PARAM)
-                print ("Adding new params to %s" %(OLD_PARAM_FILE))
-
-                for key, value in NEW_PARAM_YML.iteritems():
-                    if key not in OLD_PARAM_YML:
-                        ADD_KEYS.append(key)
-                        ADD_VALUES.append(value)
-                        print (ForeRED.format("adding %s to %s" %(key, OLD_PARAM_FILE)))
-                    else:
-                        print ("%s found in %s" %(key, OLD_PARAM_FILE))
-
-                save_yml(OLD_PARAM_FILE, OLD_PARAM_YML, ADD_KEYS, ADD_VALUES)
-        if "concourse" in PARAM:
-            APP = "concourse"
-            for SERVER in ['app','ops']:
-                ADD_KEYS = []
-                ADD_VALUES = []
-                OLD_PARAM_FILE = HOME + "concourse/" + SERVER +"/concourse-params.yml"
-
-                if not os.path.isfile(OLD_PARAM_FILE):
-                    print (ForeRED.format("Creating %s" %(OLD_PARAM_FILE)))
-                    os.system("mkdir -p %s/%s/%s" %(HOME, APP, SERVER))
-                    os.system("cp %s/templates/%s %s" %(REPO_PATH, PARAM, OLD_PARAM_FILE))
-                else:
-                    NEW_PARAM = ("%s/templates/%s" %(REPO_PATH, PARAM))
-
-                    OLD_PARAM_YML = read_yml(OLD_PARAM_FILE)
-                    NEW_PARAM_YML = read_yml(NEW_PARAM)
-                    print ("Adding new params to %s" %(OLD_PARAM_FILE))
-
-                    for key, value in NEW_PARAM_YML.iteritems():
-                        if key not in OLD_PARAM_YML:
-                            ADD_KEYS.append(key)
-                            ADD_VALUES.append(value)
-                            print (ForeRED.format("adding %s to %s" %(key, OLD_PARAM_FILE)))
-                        else:
-                            print ("%s found in %s" %(key, OLD_PARAM_FILE))
-
-                    save_yml(OLD_PARAM_FILE, OLD_PARAM_YML, ADD_KEYS, ADD_VALUES)

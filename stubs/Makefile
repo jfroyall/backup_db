@@ -3,4 +3,4 @@
 %:%.c
 	cc  -o$@ $<
 
-all: om
+all: om mc
