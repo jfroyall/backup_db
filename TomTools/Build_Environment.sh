@@ -11,17 +11,17 @@
 ### BOSH Director Deployment ###
 #mkdir ~/workspace
 
-rm -rf ~/workspace/bosh-deployment
-cd ~/workspace
-git clone https://github.com/cloudfoundry/bosh-deployment bosh-deployment
+#rm -rf ~/workspace/bosh-deployment
+#cd ~/workspace
+#git clone https://github.com/cloudfoundry/bosh-deployment bosh-deployment
 
 mkdir -p ~/workspace/deployments/vbox
 cd ~/workspace/deployments/vbox
 
 
 
-cp ~/workspace/bosh-deployment/virtualbox/cpi.yml ~/workspace/bosh-deployment/virtualbox/cpi.yml.orig
-sed 's/6144/8192/g' ~/workspace/bosh-deployment/virtualbox/cpi.yml.orig > ~/workspace/bosh-deployment/virtualbox/cpi.yml
+#cp ~/workspace/bosh-deployment/virtualbox/cpi.yml ~/workspace/bosh-deployment/virtualbox/cpi.yml.orig
+#sed 's/6144/8192/g' ~/workspace/bosh-deployment/virtualbox/cpi.yml.orig > ~/workspace/bosh-deployment/virtualbox/cpi.yml
 
 bosh create-env ~/workspace/bosh-deployment/bosh.yml \
   --state state.json \
@@ -37,11 +37,17 @@ bosh create-env ~/workspace/bosh-deployment/bosh.yml \
   -v network_name=vboxnet0 \
   -v outbound_network_name=NatNetwork
 
+if [ $? -ne 0 ]; then
+    echo "Failed to create the environment"
+    exit 1
+fi
+
 
 
 cd ~/workspace/deployments
 bosh -e 192.168.50.6 alias-env vbox --ca-cert <(bosh int vbox/creds.yml --path /director_ssl/ca)
 bosh int vbox/creds.yml --path /admin_password
+
 #bosh -e vbox login  --client=admin --client-secret=<(bosh int vbox/creds.yml --path /admin_password)
 bosh -e vbox login
 
