@@ -25,4 +25,14 @@ This project is used to move the databases from one foundation to another.
 - 14 Aug 2020
   - Finished the outline of `utils.py`.
 
-- 18 Aug 2020
+- 24 Aug 2020
+  - Got CF running under `libvirt`.
+  - Pushed an application onto the foundation.
+  - Building a script to push multiple  apps...done, but needs a lot of work.
+  - The general plan:
+    1.  Review the `libvirt` work and update the documentation.
+    1.  Clean up the script which pushes apps.
+    1.  Reconcile `omg/lol` on KRlan with what happens with `libvirt`.
+    1.  Adjust scripts accordingly.
+    1.  Rework the `omg/lol` scripts to Python/API.  Use M. Shannon's layout.
+    

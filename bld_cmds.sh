@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/bin/bash
 
 if [ ${BASH_VERSINFO[0]} -lt  4 ]; then
   echo "$0: bash version 4 or greate is required"
