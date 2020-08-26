@@ -13,11 +13,6 @@ import argparse
 import subprocess
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--aws', action='store_true')
-args = parser.parse_args()
-
-
 ForeRED = "\033[01;31m{0}\033[00m"
 ForeYELLOW = "\033[01;32m{0}\033[00m"
 ForeBLUE = "\033[01;33m{0}\033[00m"
@@ -29,16 +24,6 @@ OPS_CONCOURSE_CREDS_FILE="/home/ubuntu/mcp-secrets/concourse/ops/creds.yml"
 DOMAIN=".kesselrun.org"
 CF_API_TEMPLATE="api.system.{0}.{1}"+DOMAIN
 CF_CONFIG_FILE_NAME="~/.cf/config.json"
-
-
-## \todo remove this code
-PARAM_FILES = (
-    "director/director-params{0}.yml".format('-aws' if args.aws else ''),
-    "director/cloud-config-params{0}.yml".format('-aws' if args.aws else ''),
-    "concourse/concourse-params{0}.yml".format('-aws' if args.aws else '')
-)
-
-REPO_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
 ## \todo remove this code
@@ -379,6 +364,21 @@ def execute_over_ssh (user_name, creds, fqdn, cmd):
 
 
 if __name__ == "__main__":
+
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--aws', action='store_true')
+    args = parser.parse_args()
+
+
+    ## \todo remove this code
+    PARAM_FILES = (
+        "director/director-params{0}.yml".format('-aws' if args.aws else ''),
+        "director/cloud-config-params{0}.yml".format('-aws' if args.aws else ''),
+        "concourse/concourse-params{0}.yml".format('-aws' if args.aws else '')
+    )
+
+    REPO_PATH = os.path.dirname(os.path.realpath(__file__))
 
     os.environ['PATH']="./stubs:" + os.environ['PATH'];
     #print_info("This is the PATH: " + os.environ['PATH']);
