@@ -13,6 +13,7 @@ from   utils import print_info, print_warning, print_error
 import Bosh
 from   CredHub import CredHub
 
+import omg
 
 
 
@@ -38,11 +39,15 @@ if not os.path.isfile(infile_name):
     sys.exit(1)
 
 
-print_info("Create a CredHub instance")
-credHub=CredHub();
+#print_info("Create a CredHub instance")
+#credHub=CredHub();
 #
-print_info("Create a Bosh instance")
-bosh=Bosh.Bosh('test_data/bosh-creds.yml');
+#print_info("Create a Bosh instance")
+#bosh=Bosh.Bosh('test_data/bosh-creds.yml');
+
+
+#print_info("Create a CloudFoundry instance")
+omg.omg(infile_name, "no.where.net", "eu", "atlas");
 
 #print_info("Create a CloudFoundry instance")
 #

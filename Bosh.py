@@ -12,7 +12,7 @@ class Bosh():
 
   def __loginConcourseCredhub (concourse_creds_file, concourse_host):
       with open(creds, 'r') as f:
-          yml_creds = yaml.load(f)
+          yml_creds = yaml.safe_load(f)
       ca_cert = yml_creds['credhub_tls']['ca']
       os.environ['CREDHUB_CA_CERT'] = ca_cert
       print_info ("Logging into Concourse Credhub")
@@ -34,7 +34,7 @@ class Bosh():
     print_info("class name is: "+ Bosh.__name__)
 
     with open(creds_file, 'r') as f:
-        yml_creds = yaml.load(f)
+        yml_creds = yaml.safe_load(f)
     #print(yml_creds);
     ca_cert = yml_creds['credhub_tls']['ca']
 
