@@ -31,6 +31,7 @@ class Bosh():
   ## Initialization function
   def __init__(self, creds_file):
     print_info("Into the function")
+    print_info("class name is: "+ Bosh.__name__)
 
     with open(creds_file, 'r') as f:
         yml_creds = yaml.load(f)
