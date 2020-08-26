@@ -30,7 +30,7 @@ CF_CONFIG_FILE_NAME="~/.cf/config.json"
 def read_yml(RFILE):
     try:
         with open(RFILE, "r") as read_file:
-            ymlSecrets = yaml.load(read_file)
+            ymlSecrets = yaml.safe_load(read_file)
     except ValueError:
         print (ForeRED.format("%s Not a valid yml file!" %(RFILE)))
     return ymlSecrets
