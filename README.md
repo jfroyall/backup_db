@@ -1,4 +1,27 @@
-# org-and-space-mgmt
+# Tools used to probe the foundations.
+
+- Principal components
+  - Vault
+  - BOSH/CredHub at the jumpbox
+  - CloudFoundry
+    - CredHub
+    - Orgs
+    - Spaces
+    - Apps
+    - Services
+
+- Principal functions
+  - Verify Vault for consistency
+  - Verify major CredHub for consistency
+  - Verify CloudFoundry  CredHub 
+
+- Secondary functions
+  - Dump tables
+  - Dump Graphviz 
+
+# Some title
+
+
 
 This project is used to move the databases from one foundation to another.  
 

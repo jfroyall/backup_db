@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-"""
-Name: utils.py
-Description: Utility functions
-Version: 
-Author: 
-"""
+##\file Description: Utility functions
+#
+#Name: utils.py
+#Version: 
+#Author: 
 
 import sys
 import os
@@ -32,6 +31,7 @@ CF_API_TEMPLATE="api.system.{0}.{1}"+DOMAIN
 CF_CONFIG_FILE_NAME="~/.cf/config.json"
 
 
+## \todo remove this code
 PARAM_FILES = (
     "director/director-params{0}.yml".format('-aws' if args.aws else ''),
     "director/cloud-config-params{0}.yml".format('-aws' if args.aws else ''),
@@ -41,6 +41,7 @@ PARAM_FILES = (
 REPO_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
+## \todo remove this code
 def read_yml(RFILE):
     try:
         with open(RFILE, "r") as read_file:
@@ -50,6 +51,7 @@ def read_yml(RFILE):
     return ymlSecrets
 
 
+## \todo remove this code
 def save_yml(OLD_PARAM_FILE, OLD_PARAM_YML, ADD_KEYS, ADD_VALUES):
     with open(OLD_PARAM_FILE, 'a') as OLD_PARAM_FILE1:
         try:
@@ -61,6 +63,7 @@ def save_yml(OLD_PARAM_FILE, OLD_PARAM_YML, ADD_KEYS, ADD_VALUES):
         except yaml.YAMLError as exc:
             print(exc)
 
+## Builds a default message string
 def build_msg(pfx, a_string):
   theFrame=sys._getframe(2);
   lineno=theFrame.f_lineno
@@ -68,100 +71,105 @@ def build_msg(pfx, a_string):
   msg="%s: line: %d---%s" % (pfx, lineno, a_string)
   return(msg)
 
+## Print informational messages
 def print_info(a_string):
   msg=build_msg ("INFO", a_string);
   print (ForeBLUE.format("%s" %(msg)))
 
 
+## Print warning messages
 def print_warning(a_string):
   "This function prints a warning message"
   msg=build_msg ("WARNING", a_string);
 
   print (ForeYELLOW.format("%s" %(msg)))
 
+## Print error messages
 def print_error(a_string):
   msg=build_msg ("ERROR", a_string);
   print (ForeRED.format("%s" %(msg)))
 
+## Used to raise errors
 def raise_error(a_string):
   msg=build_msg ("ERROR", a_string);
   print (ForeRED.format("%s" %(msg)))
   raise SystemExit(1)
 
-def check_app_name(a_string):
 ## Returns True if the specified app exists in the org and space  
+def check_app_name(a_string):
   print_info("checking app named: " + a_string);
   print_warning("Fix this patch");
   return True;
 
 
 #######################################################
-def check_foundation_name(a_string):
 ## Returns True if the specified foundation exists
+def check_foundation_name(a_string):
   print_info("checking foundation named: " + a_string);
   print_warning("Fix this patch");
   return True;
 
 
 #######################################################
-def check_org_name(a_string):
 ## Returns True if the specified org exists
+def check_org_name(a_string):
   print_info("checking org named: " + a_string);
   print_warning("Fix this patch");
   return True;
 
 
 #######################################################
-def check_space_name(a_string):
 ## Returns True if the specified space exists
+def check_space_name(a_string):
   print_info("checking space named: " + a_string);
   print_warning("Fix this patch");
   return True;
 
 
 #######################################################
-def check_site_name(a_string):
 ## Returns True if the specified site exists
+def check_site_name(a_string):
   print_info("checking site named: " + a_string);
   print_warning("Fix this patch");
   return True;
 
 
 #######################################################
+## Set a few constants \todo This may not be needed
 def set_constants():
   #print_warning("Fix this patch");
   return True;
 
 #######################################################
+## Verify constants \todo This may not be needed
 def check_constants():
   print_warning("Check OPS_CONCOURSE_CREDS_FILE here!")
   return True;
 
 #######################################################
+## Runs the jq 'cmd' on the file named 'fn'
 def jq(cmd, fn):
-  """
-    Runs the jq 'cmd' on the file named 'fn'
-  """
   print_warning ("Stubbed the returned value")
   return "https://aapi.system.fulcrum.eu.kesselrun.org"
 
 #######################################################
+## Check the CloudFoundry configuration
+# \verbatim
+#  Input CF deployment description
+#  Returns True or False
+#
+#  if CF_CONFIG_FILE_NAME exists
+#    if .Target value is the expected URL, 
+#      return True
+#
+#  if force_flag is true 
+#    login to CF 
+#    check .Target
+#    return True
+#
+#  return False
+# \endverbatim
 def check_cf_config(region, foundation, org, space, force_flag=False):
-  """
-  Input CF deployment description
-  Returns True or False
-
-  if CF_CONFIG_FILE_NAME exists
-    if .Target value is the expected URL, 
-      return True
-
-  if force_flag is true 
-    login to CF 
-    check .Target
-    return True
-
-  return False
-  """
 
   print_warning ("Check this code")
 
@@ -221,11 +229,8 @@ def check_cf_config(region, foundation, org, space, force_flag=False):
 
 
 #######################################################
+## Log onto 'credhub'
 def credhub_login(file_name):
-  """
-  Log onto 'credhub'
-    
-  """
 
   print_warning ("Entering the function!")
 
