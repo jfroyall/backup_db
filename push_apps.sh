@@ -38,10 +38,31 @@ EOF
 }
 
 
+
+#++++++++++++++++ #++++++++++++++++ #++++++++++++++++
+
+site=eu
+SERVER=192.168.5.13
+SECRETS_REPO=/home/ubuntu/mcp-secrets
+
 domain="apps.mycf.lan"
+
+# set the CredHub API
+credhub api --ca-cert=<(bosh int $SECRETS_REPO/concourse/ops/creds.yml --path /credhub-ca/ca) --server=$SERVER:8844
+
+# get a CredHub token
+credhub login --client-name=concourse_to_credhub --client-secret=`bosh int $SECRETS_REPO/concourse/ops/creds.yml --path /concourse_to_credhub_secret`
+
 for f in 0; do
 
     foundation=f$f
+    credhub set -t value \
+            -n /concourse/${site}${DASH}${hold}-${foundation}/opsman_admin_password \
+            -v ops_man_pw
+
+    #set the opsman password
+
+
     for o in {0..0}; do
 
         org=org$o
