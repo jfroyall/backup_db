@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ##############################################################
 #utility script to push example apps onto a set of foundations
 
@@ -42,16 +44,25 @@ EOF
 #++++++++++++++++ #++++++++++++++++ #++++++++++++++++
 
 site=eu
+
 SERVER=192.168.5.13
-SECRETS_REPO=/home/ubuntu/mcp-secrets
+SECRETS_REPO=./mcp-secrets
+
+#SERVER=$CREDHUB_SERVER
+#SECRETS_REPO=/home/ubuntu/mcp-secrets
+
+hold=
+DASH=
 
 domain="apps.mycf.lan"
 
 # set the CredHub API
-credhub api --ca-cert=<(bosh int $SECRETS_REPO/concourse/ops/creds.yml --path /credhub-ca/ca) --server=$SERVER:8844
+#credhub api --ca-cert=<(bosh int $SECRETS_REPO/concourse/ops/creds.yml --path /credhub-ca/ca) --server=$SERVER:8844
+credhub api 
 
 # get a CredHub token
-credhub login --client-name=concourse_to_credhub --client-secret=`bosh int $SECRETS_REPO/concourse/ops/creds.yml --path /concourse_to_credhub_secret`
+#credhub login --client-name=concourse_to_credhub --client-secret=`bosh int $SECRETS_REPO/concourse/ops/creds.yml --path /concourse_to_credhub_secret`
+credhub login 
 
 for f in 0; do
 

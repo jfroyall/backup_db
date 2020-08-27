@@ -27,7 +27,7 @@ def omg(credsFileName, DOMAIN,  region, foundation, force=False):
   print_info("This is the command: "+the_command)
   opsman_pw = "foobar"
 
-  #  Retrieve Produce ID from OM
+  #  Retrieve Product ID from OM
   opsman_url="https://opsman.%s.%s%s" %(foundation, region, DOMAIN) 
   print_info("This is the URL: "+opsman_url)
 
